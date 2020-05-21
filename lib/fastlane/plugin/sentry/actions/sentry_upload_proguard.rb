@@ -2,7 +2,7 @@ module Fastlane
   module Actions
     class SentryUploadProguardAction < Action
       def self.run(params)
-        Helper::SentryHelper.check_sentry_cli!
+        Helper::SentryHelper.check_sentry_cli!(params)
         Helper::SentryConfig.parse_api_params(params)
 
         # Params - mapping & manifest
@@ -14,7 +14,7 @@ module Fastlane
         UI.user_error!("AndroidManifest.xml file does not exist at path: #{android_manifest_path}") unless File.exist? android_manifest_path
 
         command = [
-          "sentry-cli",
+            Helper::SentryHelper.sentry_cli(params),
           "upload-proguard",
           "--android-manifest",
           android_manifest_path,

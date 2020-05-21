@@ -4,17 +4,17 @@ module Fastlane
       def self.run(params)
         require 'shellwords'
 
-        Helper::SentryHelper.check_sentry_cli!
+        Helper::SentryHelper.check_sentry_cli!(params)
         Helper::SentryConfig.parse_api_params(params)
 
         version = params[:version]
         version = "#{params[:app_identifier]}-#{params[:version]}" if params[:app_identifier]
 
         command = [
-          "sentry-cli",
-          "releases",
-          "new",
-          version
+            Helper::SentryHelper.sentry_cli(params),
+            "releases",
+            "new",
+            version
         ]
         command.push("--finalize") if params[:finalize].nil?
 
@@ -32,26 +32,25 @@ module Fastlane
 
       def self.details
         [
-          "This action allows you to create new releases for a project on Sentry.",
-          "See https://docs.sentry.io/learn/cli/releases/#creating-releases for more information."
+            "This action allows you to create new releases for a project on Sentry.",
+            "See https://docs.sentry.io/learn/cli/releases/#creating-releases for more information."
         ].join(" ")
       end
 
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
-          FastlaneCore::ConfigItem.new(key: :version,
-                                       description: "Release version to create on Sentry"),
-          FastlaneCore::ConfigItem.new(key: :finalize,
-                                       description: "Whether to finalize the release. If not provided or false, the release can be finalized using the finalize_release action",
-                                       default_value: false,
-                                       is_string: false,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :app_identifier,
-                                      short_option: "-a",
-                                      env_name: "SENTRY_APP_IDENTIFIER",
-                                      description: "App Bundle Identifier, prepended to version",
-                                      optional: true)
-
+            FastlaneCore::ConfigItem.new(key: :version,
+                                         description: "Release version to create on Sentry"),
+            FastlaneCore::ConfigItem.new(key: :finalize,
+                                         description: "Whether to finalize the release. If not provided or false, the release can be finalized using the finalize_release action",
+                                         default_value: false,
+                                         is_string: false,
+                                         optional: true),
+            FastlaneCore::ConfigItem.new(key: :app_identifier,
+                                         short_option: "-a",
+                                         env_name: "SENTRY_APP_IDENTIFIER",
+                                         description: "App Bundle Identifier, prepended to version",
+                                         optional: true)
         ]
       end
 

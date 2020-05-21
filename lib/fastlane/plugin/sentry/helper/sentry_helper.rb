@@ -1,25 +1,35 @@
 module Fastlane
   module Helper
     class SentryHelper
-      def self.check_sentry_cli!
-        unless `which sentry-cli`.include?('sentry-cli')
-          UI.error("You have to install sentry-cli version #{Fastlane::Sentry::CLI_VERSION} to use this plugin")
-          UI.error("")
-          UI.error("Install it using:")
-          UI.command("brew install getsentry/tools/sentry-cli")
-          UI.error("OR")
-          UI.command("curl -sL https://sentry.io/get-cli/ | bash")
-          UI.error("If you don't have homebrew, visit http://brew.sh")
-          UI.user_error!("Install sentry-cli and start your lane again!")
+      def self.check_sentry_cli!(params)
+        sentry_path = params[:sentry_cli_path]
+        unless sentry_path
+          sentry_path = `which sentry-cli`
+          unless sentry_path.include?('sentry-cli')
+            UI.error("You can set the sentry_cli_path or")
+            UI.error("You need to install sentry-cli version #{Fastlane::Sentry::CLI_VERSION} to use this plugin")
+            UI.error("")
+            UI.error("Install it using:")
+            UI.command("brew install getsentry/tools/sentry-cli")
+            UI.error("OR")
+            UI.command("curl -sL https://sentry.io/get-cli/ | bash")
+            UI.error("If you don't have homebrew, visit http://brew.sh")
+            UI.user_error!("Install sentry-cli and start your lane again!")
+          end
         end
 
-        sentry_cli_version = Gem::Version.new(`sentry-cli --version`.scan(/(?:\d+\.?){3}/).first)
+
+        sentry_cli_version = Gem::Version.new(`#{sentry_path} --version`.scan(/(?:\d+\.?){3}/).first)
         required_version = Gem::Version.new(Fastlane::Sentry::CLI_VERSION)
         if sentry_cli_version < required_version
           UI.user_error!("Your sentry-cli is outdated, please upgrade to at least version #{Fastlane::Sentry::CLI_VERSION} and start your lane again!")
         end
 
         UI.success("sentry-cli #{sentry_cli_version} installed!")
+      end
+
+      def self.sentry_cli(params)
+        params[:sentry_cli_path] ? params[:sentry_cli_path] : "sentry-cli"
       end
 
       def self.call_sentry_cli(command)

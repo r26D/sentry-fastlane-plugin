@@ -23,7 +23,15 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :project_slug,
                                        env_name: "SENTRY_PROJECT_SLUG",
                                        description: "Project slug for Sentry",
-                                       optional: true)
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :sentry_cli_path,
+                                                 env_name: "SENTRY_CLI_PATH",
+                                                 description: "Path to your sentry-cli. Default to `which sentry-cli`",
+                                                 optional: true,
+                                                 verify_block: proc do |value|
+                                                   UI.user_error! "Could not find sentry-cli." unless File.exist?(File.expand_path(value))
+                                                 end)
+
         ]
       end
 
