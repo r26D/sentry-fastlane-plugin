@@ -25,12 +25,12 @@ module Fastlane
                                        description: "Project slug for Sentry",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :sentry_cli_path,
-                                                 env_name: "SENTRY_CLI_PATH",
-                                                 description: "Path to your sentry-cli. Default to `which sentry-cli`",
-                                                 optional: true,
-                                                 verify_block: proc do |value|
-                                                   UI.user_error! "Could not find sentry-cli." unless File.exist?(File.expand_path(value))
-                                                 end)
+                                       env_name: "SENTRY_CLI_PATH",
+                                       description: "Path to your sentry-cli. Default to `which sentry-cli`",
+                                       optional: true,
+                                       verify_block: proc do |value|
+                                         UI.user_error! "Could not find sentry-cli." unless File.exist?(File.expand_path(value))
+                                       end)
 
         ]
       end
@@ -75,7 +75,7 @@ module Fastlane
       end
 
       def self.fallback_sentry_cli
-        sentry_cli_result = JSON.parse(`sentry-cli info --config-status-json`)
+        sentry_cli_result = JSON.parse(`#{Helper::SentryHelper.sentry_cli} info --config-status-json`)
         return (sentry_cli_result["auth"]["successful"] &&
           !sentry_cli_result["auth"]["type"].nil? &&
           !sentry_cli_result["config"]["org"].nil? &&

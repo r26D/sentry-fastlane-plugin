@@ -16,7 +16,7 @@ module Fastlane
           UI.user_error!("dSYM does not exist at path: #{path}") unless File.exist? path
         end
 
-        command = [Helper::SentryHelper.sentry_cli(params), "upload-dsym"]
+        command = [Helper::SentryHelper.sentry_cli, "upload-dsym"]
         command.push("--symbol-maps") unless params[:symbol_maps].nil?
         command.push(params[:symbol_maps]) unless params[:symbol_maps].nil?
         command.push("--info-plist") unless params[:info_plist].nil?

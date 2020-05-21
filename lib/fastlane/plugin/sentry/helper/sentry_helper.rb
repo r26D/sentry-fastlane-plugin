@@ -24,12 +24,12 @@ module Fastlane
         if sentry_cli_version < required_version
           UI.user_error!("Your sentry-cli is outdated, please upgrade to at least version #{Fastlane::Sentry::CLI_VERSION} and start your lane again!")
         end
-
-        UI.success("sentry-cli #{sentry_cli_version} installed!")
+        ENV["SENTRY_CLI_PATH"] = sentry_path
+        UI.success("#{sentry_path} #{sentry_cli_version} installed!")
       end
 
-      def self.sentry_cli(params)
-        params[:sentry_cli_path] ? params[:sentry_cli_path] : "sentry-cli"
+      def self.sentry_cli
+        ENV["SENTRY_CLI_PATH"]
       end
 
       def self.call_sentry_cli(command)

@@ -11,7 +11,7 @@ module Fastlane
         version = "#{params[:app_identifier]}-#{params[:version]}" if params[:app_identifier]
 
         command = [
-            Helper::SentryHelper.sentry_cli(params),
+            Helper::SentryHelper.sentry_cli,
           "releases",
           "finalize",
           version

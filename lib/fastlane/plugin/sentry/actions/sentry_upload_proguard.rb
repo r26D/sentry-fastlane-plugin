@@ -14,7 +14,7 @@ module Fastlane
         UI.user_error!("AndroidManifest.xml file does not exist at path: #{android_manifest_path}") unless File.exist? android_manifest_path
 
         command = [
-            Helper::SentryHelper.sentry_cli(params),
+            Helper::SentryHelper.sentry_cli,
           "upload-proguard",
           "--android-manifest",
           android_manifest_path,
