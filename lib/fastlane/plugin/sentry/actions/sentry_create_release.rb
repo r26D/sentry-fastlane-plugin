@@ -38,8 +38,8 @@ module Fastlane
       end
 
       def self.available_options
-        #  Helper::SentryConfig.common_api_config_items + [
-        [    FastlaneCore::ConfigItem.new(key: :version,
+        Helper::SentryConfig.common_api_config_items + [
+            FastlaneCore::ConfigItem.new(key: :version,
                                          description: "Release version to create on Sentry"),
             FastlaneCore::ConfigItem.new(key: :finalize,
                                          description: "Whether to finalize the release. If not provided or false, the release can be finalized using the finalize_release action",
