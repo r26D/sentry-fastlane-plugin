@@ -14,3 +14,5 @@ Gemfile.lock
 .env
 .env.api
 .env.auth
+
+.idea
